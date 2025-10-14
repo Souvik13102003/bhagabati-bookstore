@@ -2,6 +2,8 @@
 import connect from '../../../lib/mongoose';
 import Book from '../../../models/Book';
 
+const ADMIN_PASS = process.env.ADMIN_PASS || '';
+
 export async function GET(request) {
   try {
     await connect();
@@ -13,7 +15,6 @@ export async function GET(request) {
 
     const filter = {};
     if (search) {
-      // simple text-like search on title and authors
       filter.$or = [
         { title: { $regex: search, $options: 'i' } },
         { authors: { $regex: search, $options: 'i' } },
@@ -45,7 +46,17 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
+    // Server-side admin check: require correct header
+    const suppliedPass = request.headers.get('x-admin-pass') || '';
+    if (!ADMIN_PASS || suppliedPass !== ADMIN_PASS) {
+      return new Response(JSON.stringify({ error: 'Unauthorized: invalid admin password' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     const body = await request.json();
+
     // basic validation
     if (!body.title || !body.slug || typeof body.price === 'undefined') {
       return new Response(JSON.stringify({ error: 'title, slug and price are required' }), {
