@@ -155,9 +155,6 @@ export default async function BookDetailPage({ params }) {
           </p>
 
           <div className="flex gap-4 mb-8">
-            {/* <button className="px-5 py-2 bg-brand-accent text-white rounded hover:opacity-90">
-              Buy Now
-            </button> */}
             <BuyNowButton book={book} qty={1} />
             <AddToCartButton book={book} />
           </div>

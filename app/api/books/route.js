@@ -2,8 +2,6 @@
 import connect from '../../../lib/mongoose';
 import Book from '../../../models/Book';
 
-const ADMIN_PASS = process.env.ADMIN_PASS || '';
-
 export async function GET(request) {
     try {
         await connect();
@@ -58,7 +56,8 @@ export async function GET(request) {
 export async function POST(request) {
     try {
         // Server-side admin check: require correct header
-        const suppliedPass = request.headers.get('x-admin-pass') || '';
+        const suppliedPass = (request.headers.get('x-admin-pass') || '').trim();
+        const ADMIN_PASS = (process.env.ADMIN_PASS || '').trim();
         if (!ADMIN_PASS || suppliedPass !== ADMIN_PASS) {
             return new Response(JSON.stringify({ error: 'Unauthorized: invalid admin password' }), {
                 status: 401,

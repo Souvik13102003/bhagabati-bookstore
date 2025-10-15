@@ -19,7 +19,7 @@ export default function AddToCartButton({ book, variant = 'default' }) {
   function saveCart(cart) {
     localStorage.setItem('bhg_cart', JSON.stringify(cart));
     // optional: trigger navigation refresh or other UI updates
-    try { window.dispatchEvent(new Event('storage')); } catch {}
+    try { window.dispatchEvent(new Event('storage')); } catch { }
   }
 
   const handleAdd = (e) => {
