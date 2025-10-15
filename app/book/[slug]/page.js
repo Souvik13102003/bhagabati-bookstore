@@ -1,5 +1,7 @@
 // app/book/[slug]/page.js
 import Link from "next/link";
+import AddToCartButton from '@/components/AddToCartButton';
+import BuyNowButton from "@/components/BuyNowButton";
 
 // Fetch one book by slug
 // Fetch one book by slug (debug-friendly + tolerant matching)
@@ -141,7 +143,7 @@ export default async function BookDetailPage({ params }) {
 
           <div className="flex items-end gap-3 mb-4">
             <p className="text-2xl font-bold text-brand-accent">
-              ₹{book.price.toFixed(2)}
+              ₹{(book.price ?? 0).toFixed(2)}
             </p>
             {book.mrp && book.mrp > book.price && (
               <p className="text-gray-400 line-through">₹{book.mrp.toFixed(2)}</p>
@@ -153,12 +155,11 @@ export default async function BookDetailPage({ params }) {
           </p>
 
           <div className="flex gap-4 mb-8">
-            <button className="px-5 py-2 bg-brand-accent text-white rounded hover:opacity-90">
+            {/* <button className="px-5 py-2 bg-brand-accent text-white rounded hover:opacity-90">
               Buy Now
-            </button>
-            <button className="px-5 py-2 border rounded hover:bg-gray-50">
-              Add to Cart
-            </button>
+            </button> */}
+            <BuyNowButton book={book} qty={1} />
+            <AddToCartButton book={book} />
           </div>
 
           {book.pdfPreview && (
